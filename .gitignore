@@ -1,0 +1,6 @@
+.bloop/
+.metals/
+*~
+*.swp
+out/
+
