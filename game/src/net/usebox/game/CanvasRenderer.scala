@@ -4,12 +4,6 @@ import scala.scalajs.js
 import scala.scalajs.js.annotation._
 import org.scalajs.dom
 
-trait Drawable {
-  def image: dom.html.Image
-  def x: Double
-  def y: Double
-}
-
 trait Renderer {
   def render(block: => Unit): Unit
   def draw(drawable: Drawable): Unit
