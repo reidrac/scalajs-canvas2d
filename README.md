@@ -1,5 +1,7 @@
 # Scala.js and Canvas 2D
 
+**This is a work in progress**
+
 ## Requirements
 
  - [Mill](http://www.lihaoyi.com/mill/) for building
