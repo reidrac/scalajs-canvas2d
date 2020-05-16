@@ -53,8 +53,6 @@ class CanvasRenderer(
       Math.floor(drawable.y)
     )
 
-  def getCtx: GameRenderingContext = ctx
-
   def onResize(event: dom.UIEvent): Unit = resize
   def resize: Unit = {
     scale = Math.floor(dom.window.innerHeight / height.toDouble).toInt
