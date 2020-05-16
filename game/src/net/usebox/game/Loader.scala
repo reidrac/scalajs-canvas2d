@@ -6,7 +6,9 @@ import scala.scalajs.js
 import org.scalajs.dom
 
 trait Loader {
-  val renderer: CanvasRenderer
+  def run: Unit
+  def renderer: CanvasRenderer
+
   var loaded: Int = 0
 
   def imageLoader(
@@ -33,13 +35,13 @@ trait Loader {
   }
 
   def load(
-      resources: List[Future[(String, js.Object)]]
+      sources: List[Future[(String, js.Object)]]
   )(block: (Either[Throwable, Map[String, js.Object]]) => Unit)(implicit
       executionContext: scala.concurrent.ExecutionContextExecutor
   ): Unit = {
-    loadingProgress(resources.size)
+    loadingProgress(sources.size)
 
-    Future.sequence(resources).onComplete { result =>
+    Future.sequence(sources).onComplete { result =>
       block(result.toEither.map { loaded =>
         loaded
           .map { case (name, element) => (name, element) }
@@ -74,5 +76,4 @@ trait Loader {
 
     loading(0)
   }
-
 }
