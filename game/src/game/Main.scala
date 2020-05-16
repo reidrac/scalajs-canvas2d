@@ -20,26 +20,27 @@ class MyGame() extends Loader with GameLoop {
       // renderer.draw(d)
     }
 
-  load(
-    List(
-      imageLoader("image", "resources/font.png"),
-      imageLoader("image1", "resources/font.png"),
-      imageLoader("image2", "resources/font.png"),
-      imageLoader("image3", "resources/font.png"),
-      imageLoader("image4", "resources/font.png"),
-      imageLoader("image5", "resources/font.png"),
-      imageLoader("image6", "resources/font.png"),
-      imageLoader("image7", "resources/font.png"),
-      imageLoader("image8", "resources/font.png")
-    )
-  ) {
-    case Left(error) =>
-      val p = dom.document.createElement("p")
-      p.textContent = s"ERROR loading resources: $error"
-      dom.document.body.appendChild(p)
+  def run: Unit =
+    load(
+      List(
+        imageLoader("image", "resources/font.png"),
+        imageLoader("image1", "resources/font.png"),
+        imageLoader("image2", "resources/font.png"),
+        imageLoader("image3", "resources/font.png"),
+        imageLoader("image4", "resources/font.png"),
+        imageLoader("image5", "resources/font.png"),
+        imageLoader("image6", "resources/font.png"),
+        imageLoader("image7", "resources/font.png"),
+        imageLoader("image8", "resources/font.png")
+      )
+    ) {
+      case Left(error) =>
+        val p = dom.document.createElement("p")
+        p.textContent = s"ERROR loading resources: $error"
+        dom.document.body.appendChild(p)
 
-    case Right(resources) => startLoop
-  }
+      case Right(resources) => startLoop
+    }
 }
 
 object Main {
@@ -47,7 +48,7 @@ object Main {
     dom.document.addEventListener(
       "DOMContentLoaded",
       { (e: dom.Event) =>
-        new MyGame()
+        new MyGame().run
       }
     )
   }
