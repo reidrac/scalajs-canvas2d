@@ -22,7 +22,8 @@ class CanvasRenderer(
     canvasElementId: String,
     var backgroundColor: String = "rgb(21, 21, 21)",
     var width: Int = 320,
-    var height: Int = 240
+    var height: Int = 240,
+    val maxScale: Int = 3
 ) extends Renderer {
   val canvas: dom.html.Canvas =
     dom.document
@@ -49,7 +50,10 @@ class CanvasRenderer(
 
   def onResize(event: dom.UIEvent): Unit = resize
   def resize: Unit = {
-    scale = Math.floor(dom.window.innerHeight / height.toDouble).toInt
+    scale = List[Int](
+      Math.floor(dom.window.innerHeight / height.toDouble).toInt,
+      maxScale
+    ).min
     ctx.canvas.width = width * scale
     ctx.canvas.height = height * scale
     ctx.imageSmoothingEnabled = false
