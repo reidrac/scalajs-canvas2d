@@ -3,7 +3,7 @@ package net.usebox.game
 import org.scalajs.dom
 
 class BitmapFont(
-    image: dom.html.Image,
+    image: dom.html.Element,
     width: Int,
     height: Int,
     fontMap: Option[String] = None
