@@ -9,7 +9,7 @@
 
 ## Quickstart
 
-1. Use `serve.py` and open `http://128.0.0.1:8000`
+1. Use `serve.py` and open `http://127.0.0.1:8000`
 
 2. Run `mill` in background:
 
