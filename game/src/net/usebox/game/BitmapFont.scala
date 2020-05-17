@@ -12,7 +12,7 @@ class BitmapFont(
     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!?()@:/'.,- *"
   )
 
-  def renderText(text: String): Sprite = {
+  def renderText(x: Int, y: Int, text: String): Sprite = {
     val canvas =
       dom.document.createElement("canvas").asInstanceOf[dom.html.Canvas]
     canvas.width = text.size * width
@@ -38,6 +38,6 @@ class BitmapFont(
     val outputImage =
       dom.document.createElement("img").asInstanceOf[dom.html.Image]
     outputImage.src = canvas.toDataURL("image/png", null)
-    Sprite(outputImage, 0, 0)
+    Sprite(outputImage, x, y)
   }
 }

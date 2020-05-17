@@ -18,7 +18,7 @@ class MyGame(val renderer: CanvasRenderer, resources: Map[String, js.Object])
   def draw: Unit =
     renderer.render {
       renderer.ctx.clearRect(0, 0, renderer.width, renderer.height)
-      renderer.draw(font.renderText("Testing font"))
+      renderer.draw(font.renderText(10, 10, "Testing font"))
     }
 
   def run: Unit = startLoop
