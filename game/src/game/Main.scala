@@ -10,14 +10,18 @@ import net.usebox.game._
 class MyGame(val renderer: CanvasRenderer, resources: Map[String, js.Object])
     extends GameLoop {
 
+  val font =
+    new BitmapFont(resources("font").asInstanceOf[dom.html.Image], 6, 11)
+
   def update: Unit = {}
 
   def draw: Unit =
     renderer.render {
-      // renderer.draw(d)
+      renderer.ctx.clearRect(0, 0, renderer.width, renderer.height)
+      renderer.draw(font.renderText("Testing font"))
     }
 
-  def run: Unit = ()
+  def run: Unit = startLoop
 }
 
 class MyLoader(canvasElementId: String)(implicit
