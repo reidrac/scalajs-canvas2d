@@ -7,10 +7,11 @@ import org.scalajs.dom
 
 import net.usebox.game._
 
-class MyGame(val renderer: CanvasRenderer, resources: Map[String, js.Object])
-    extends GameLoop {
-
-  val control = new KeyboardController()
+class MyGame(
+    renderer: CanvasRenderer,
+    controller: Controller,
+    resources: Map[String, js.Object]
+) extends GameLoop {
 
   val font =
     new BitmapFont(resources("font").asInstanceOf[dom.html.Image], 6, 11)
@@ -31,6 +32,7 @@ class MyLoader(canvasElementId: String)(implicit
 ) extends Loader {
 
   val renderer = new CanvasRenderer(canvasElementId)
+  val controller = new KeyboardController()
 
   def run: Unit =
     load(
@@ -41,7 +43,7 @@ class MyLoader(canvasElementId: String)(implicit
         p.textContent = s"ERROR loading resources: $error"
         dom.document.body.appendChild(p)
 
-      case Right(resources) => new MyGame(renderer, resources).run
+      case Right(resources) => new MyGame(renderer, controller, resources).run
     }
 }
 
