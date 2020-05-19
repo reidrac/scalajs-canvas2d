@@ -19,18 +19,50 @@ trait Loader {
     val image =
       dom.document.createElement("img").asInstanceOf[dom.html.Image]
     image.src = src
-    image.addEventListener(
-      "error",
-      (event: dom.Event) =>
-        p.failure(new RuntimeException(s"Failed to load $src"))
-    )
+
+    val onerror: js.Function1[dom.Event, Unit] = { (event: dom.Event) =>
+      p.failure(new RuntimeException(s"Failed to load $src"))
+    }
+    image.addEventListener("error", onerror)
+
     image.onload = { (event: dom.Event) =>
+      event.currentTarget.removeEventListener("error", onerror)
       image.onload = null
       loaded.synchronized {
         loaded += 1
       }
       p.success((name, image))
     }
+    p.future
+  }
+
+  def audioLoader(
+      name: String,
+      src: String
+  ): Future[(String, dom.html.Audio)] = {
+    val p = Promise[(String, dom.html.Audio)]()
+    val audio =
+      dom.document.createElement("audio").asInstanceOf[dom.html.Audio]
+    audio.src = src
+    audio.autoplay = false
+
+    val onerror: js.Function1[dom.Event, Unit] = { (event: dom.Event) =>
+      p.failure(new RuntimeException(s"Failed to load $src"))
+    }
+    audio.addEventListener("error", onerror)
+
+    lazy val canplaythrough: js.Function1[dom.Event, Unit] = {
+      (event: dom.Event) =>
+        event.currentTarget
+          .removeEventListener("canplaythrough", canplaythrough)
+        event.currentTarget.removeEventListener("error", onerror)
+        loaded.synchronized {
+          loaded += 1
+        }
+        p.success((name, audio))
+    }
+    audio.addEventListener("canplaythrough", canplaythrough)
+
     p.future
   }
 
