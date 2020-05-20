@@ -16,16 +16,13 @@ class MyGame(
   val font =
     new BitmapFont(resources("font").asInstanceOf[dom.html.Image], 6, 11)
 
-  val effect = resources("test").asInstanceOf[dom.html.Audio]
-
-  var played = false
+  val audio = new Audio(resources)
 
   def update: Unit = {
 
-    if (controller.buttonA && (!played || effect.ended)) {
-      played = true
+    if (controller.buttonA) {
       println("Played")
-      effect.play
+      audio.play("effect")
     }
 
   }
@@ -50,7 +47,7 @@ class MyLoader(canvasElementId: String)(implicit
     load(
       List(
         imageLoader("font", "resources/font.png"),
-        audioLoader("test", "resources/test.ogg")
+        audioLoader("effect", "resources/test.ogg")
       )
     ) {
       case Left(error) =>
