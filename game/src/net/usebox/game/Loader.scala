@@ -81,6 +81,16 @@ trait Loader {
 
   private def loadingProgress(size: Int) = {
     def loading(now: Double): Unit = {
+      renderer.ctx.save
+      renderer.ctx.fillStyle = "rgb(255, 255, 255)"
+      renderer.ctx.font = "caption"
+      renderer.ctx.fillText(
+        "Loading",
+        Math.floor(renderer.width * 0.2 * renderer.scale),
+        Math.floor((renderer.height / 2 - 6) * renderer.scale)
+      )
+      renderer.ctx.restore
+
       renderer.render {
         renderer.ctx.fillStyle = "rgb(128, 128, 128)"
         renderer.ctx.fillRect(
