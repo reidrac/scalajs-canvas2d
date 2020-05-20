@@ -10,13 +10,12 @@ import net.usebox.game._
 class MyGame(
     renderer: CanvasRenderer,
     controller: Controller,
+    audio: Audio,
     resources: Map[String, js.Object]
 ) extends GameLoop {
 
   val font =
     new BitmapFont(resources("font").asInstanceOf[dom.html.Image], 6, 11)
-
-  val audio = new Audio(resources)
 
   def update: Unit = {
 
@@ -55,7 +54,8 @@ class MyLoader(canvasElementId: String)(implicit
         p.textContent = s"ERROR loading resources: $error"
         dom.document.body.appendChild(p)
 
-      case Right(resources) => new MyGame(renderer, controller, resources).run
+      case Right(resources) =>
+        new MyGame(renderer, controller, new Audio(resources), resources).run
     }
 }
 
