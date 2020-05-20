@@ -29,8 +29,6 @@ mill -w "game.{reformat,fastOpt}"
  - `GameLoop` provides a game loop implementation with fixed update (at 80 FPS)
    and draw at 60 FPS (using request animation frame).
 
-On success, it creates a instance of a `GameLoop` providing
-
 ## Further info
 
  - https://www.scala-js.org/doc/
