@@ -51,17 +51,14 @@ trait Loader {
     }
     audio.addEventListener("error", onerror)
 
-    lazy val canplaythrough: js.Function1[dom.Event, Unit] = {
-      (event: dom.Event) =>
-        event.currentTarget
-          .removeEventListener("canplaythrough", canplaythrough)
-        event.currentTarget.removeEventListener("error", onerror)
-        loaded.synchronized {
-          loaded += 1
-        }
-        p.success((name, audio))
+    audio.oncanplaythrough = { (event: dom.Event) =>
+      audio.oncanplaythrough = null
+      audio.removeEventListener("error", onerror)
+      loaded.synchronized {
+        loaded += 1
+      }
+      p.success((name, audio))
     }
-    audio.addEventListener("canplaythrough", canplaythrough)
 
     p.future
   }
