@@ -1,6 +1,4 @@
-# Scala.js and Canvas 2D
-
-**This is a work in progress**
+# Scala.js gamedev with Canvas 2D
 
 ## Requirements
 
