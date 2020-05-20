@@ -3,7 +3,7 @@ package net.usebox.game
 import scala.scalajs.js
 import org.scalajs.dom
 
-class Audio(resources: Map[String, js.Object], limit: Int = 16) {
+class Audio(resources: Map[String, js.Object], limit: Int = 8) {
   val sounds: Map[String, dom.html.Audio] =
     resources
       .filter { case (k, v) => v.isInstanceOf[dom.html.Audio] }
@@ -11,6 +11,9 @@ class Audio(resources: Map[String, js.Object], limit: Int = 16) {
       .toMap
 
   var playingCount: Int = 0
+
+  def createInstance(resourceName: String): dom.html.Audio =
+    sounds(resourceName).cloneNode(true).asInstanceOf[dom.html.Audio]
 
   def play(
       resourceName: String,
@@ -22,7 +25,7 @@ class Audio(resources: Map[String, js.Object], limit: Int = 16) {
     else {
       val playable =
         if (clone)
-          sounds(resourceName).cloneNode(true).asInstanceOf[dom.html.Audio]
+          createInstance(resourceName)
         else sounds(resourceName)
 
       playable.onended = { (event: dom.Event) =>
