@@ -2,7 +2,7 @@
 import mill._, scalajslib._, scalalib._, scalafmt._
 
 object game extends ScalaJSModule with ScalafmtModule {
-  def scalaVersion = "2.13.1"
+  def scalaVersion = "2.13.2"
   def scalaJSVersion = "1.0.1"
 
   def ivyDeps = Agg(
