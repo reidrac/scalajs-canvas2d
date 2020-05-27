@@ -19,7 +19,7 @@ class Audio(resources: Map[String, js.Object], limit: Int = 8) {
       resourceName: String,
       loop: Boolean = false,
       clone: Boolean = true,
-      onended: (dom.Event) => Unit = (_: dom.Event) => ()
+      onended: (dom.Event) => _ = (_: dom.Event) => ()
   ): Option[dom.html.Audio] =
     if (playingCount >= limit)
       None
