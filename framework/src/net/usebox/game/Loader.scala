@@ -59,7 +59,6 @@ trait Loader {
       }
       p.success((name, audio))
     }
-
     p.future
   }
 
