@@ -18,8 +18,7 @@ class Audio(resources: Map[String, js.Object], limit: Int = 8) {
   def play(
       resourceName: String,
       loop: Boolean = false,
-      clone: Boolean = true,
-      onended: (dom.Event) => _ = (_: dom.Event) => ()
+      clone: Boolean = true
   ): Option[dom.html.Audio] =
     if (playingCount >= limit)
       None
@@ -34,7 +33,6 @@ class Audio(resources: Map[String, js.Object], limit: Int = 8) {
         playingCount.synchronized {
           playingCount -= 1
         }
-        onended(event)
       }
       playable.loop = loop
       playable.play
