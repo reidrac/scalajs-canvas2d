@@ -12,7 +12,7 @@
 2. Run `mill` in background:
 
 ```
-mill -w "game.{reformat,fastOpt}"
+mill -j 4 -w all "framework.{reformat,compile}" "game.{reformat,fastOpt}"
 ```
 
 ## Quick overview
