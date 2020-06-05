@@ -2,12 +2,12 @@
 
 ## Requirements
 
+ - JDK 8 (or later; openjdk 8 or 11 recommended)
  - [Mill](http://www.lihaoyi.com/mill/) for building
- - Optionally Python to run a local HTTP server (FIXME)
 
 ## Quickstart
 
-1. Use `serve.py` and open `http://127.0.0.1:8000`
+1. Run `mill server.run` for a dev HTTP server and open `http://127.0.0.1:8080`
 
 2. Run `mill` in background:
 

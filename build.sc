@@ -14,3 +14,11 @@ object framework extends MyScalaJSModule
 object game extends MyScalaJSModule {
   def moduleDeps = Seq(framework)
 }
+
+object server extends ScalaModule with ScalafmtModule {
+  def scalaVersion = "2.13.2"
+  def ivyDeps = Agg(
+    ivy"com.lihaoyi::scalatags:0.9.1",
+    ivy"com.lihaoyi::cask:0.6.7"
+  )
+}
