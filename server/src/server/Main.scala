@@ -1,29 +1,43 @@
 package server
 
-import scala.io.Source
-
+import io.undertow.server.handlers.BlockingHandler
+import io.undertow.server.handlers.accesslog.{
+  AccessLogHandler,
+  AccessLogReceiver
+}
 import scalatags.Text.all._
+import cask.util.Logger.Console
+
+class ConsoleAccessLogReceiver(logger: Console) extends AccessLogReceiver {
+  override def logMessage(message: String): Unit = logger.debug(message)
+}
 
 object DevServer extends cask.MainRoutes {
 
   @cask.staticFiles("/resources")
   def staticResourceRoutes() = "./game/resources"
 
-  @cask.get("/app/main.js")
-  def app() =
-    cask.Response(
-      Source.fromFile("./out/game/fastOpt/dest/out.js").mkString,
-      headers = Seq("Content-Type" -> "text/javascript")
-    )
+  @cask.staticFiles("/main.js")
+  def appRoute() = "./out/game/fastOpt/dest/out.js"
 
   @cask.get("/")
   def index() =
     doctype("html")(
       html(
         body(
-          script(src := "/app/main.js", `type` := "text/javascript"),
+          script(src := "/main.js", `type` := "text/javascript"),
           canvas(id := "game")
         )
+      )
+    )
+
+  override def defaultHandler =
+    new BlockingHandler(
+      new AccessLogHandler(
+        super.defaultHandler,
+        new ConsoleAccessLogReceiver(log),
+        "common",
+        Console.getClass.getClassLoader
       )
     )
 

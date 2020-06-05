@@ -45,8 +45,8 @@ class MyLoader(canvasElementId: String)(implicit
   def run: Unit =
     load(
       List(
-        imageLoader("font", "/resources/font.png"),
-        audioLoader("effect", "/resources/test.ogg")
+        imageLoader("font", "resources/font.png"),
+        audioLoader("effect", "resources/test.ogg")
       )
     ) {
       case Left(error) =>
