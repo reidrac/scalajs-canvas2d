@@ -40,7 +40,6 @@ class MyLoader(canvasElementId: String)(implicit
 ) extends Loader {
 
   val renderer = new CanvasRenderer(canvasElementId)
-  val controller = new KeyboardController()
 
   def run: Unit =
     load(
@@ -55,7 +54,12 @@ class MyLoader(canvasElementId: String)(implicit
         dom.document.body.appendChild(p)
 
       case Right(resources) =>
-        new MyGame(renderer, controller, new Audio(resources), resources).run
+        new MyGame(
+          renderer,
+          new KeyboardController(),
+          new Audio(resources),
+          resources
+        ).run
     }
 }
 
