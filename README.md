@@ -3,7 +3,7 @@
 ## Requirements
 
  - JDK 8 (or later; openjdk 8 or 11 recommended)
- - [Mill](http://www.lihaoyi.com/mill/) for building
+ - [Mill](http://www.lihaoyi.com/mill/) (0.7.4 or later) for building
 
 ## Quickstart
 
