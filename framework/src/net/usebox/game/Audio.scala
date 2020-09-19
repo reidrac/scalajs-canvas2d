@@ -5,10 +5,10 @@ import org.scalajs.dom
 
 class Audio(resources: Map[String, js.Object], limit: Int = 8) {
   val sounds: Map[String, dom.html.Audio] =
-    resources
-      .filter { case (k, v) => v.isInstanceOf[dom.html.Audio] }
-      .map { case (k, v) => (k, v.asInstanceOf[dom.html.Audio]) }
-      .toMap
+    resources.flatMap {
+      case (k, v: dom.html.Audio) => Some((k, v))
+      case _                      => None
+    }
 
   var playingCount: Int = 0
 
