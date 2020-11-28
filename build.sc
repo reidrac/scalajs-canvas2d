@@ -2,10 +2,10 @@
 import mill._, scalajslib._, scalalib._, scalafmt._
 
 trait MyScalaJSModule extends ScalaJSModule with ScalafmtModule {
-  def scalaVersion = "2.13.3"
-  def scalaJSVersion = "1.1.1"
+  def scalaVersion = "2.13.4"
+  def scalaJSVersion = "1.3.1"
   def ivyDeps = Agg(
-    ivy"org.scala-js:scalajs-dom_sjs1_2.13:1.0.0"
+    ivy"org.scala-js:scalajs-dom_sjs1_2.13:1.1.0"
   )
 }
 
@@ -16,7 +16,7 @@ object game extends MyScalaJSModule {
 }
 
 object server extends ScalaModule with ScalafmtModule {
-  def scalaVersion = "2.13.3"
+  def scalaVersion = "2.13.4"
   def ivyDeps = Agg(
     ivy"com.lihaoyi::scalatags:0.9.1",
     ivy"com.lihaoyi::cask:0.6.7"
