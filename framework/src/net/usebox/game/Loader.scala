@@ -1,7 +1,6 @@
 package net.usebox.game
 
 import scala.concurrent.{Future, Promise}
-import scala.util.Try
 
 import scala.scalajs.js
 import org.scalajs.dom
@@ -25,24 +24,19 @@ trait Loader {
     val onError = onerror(src, p)
     val xhr = new dom.XMLHttpRequest
     xhr.open("GET", src)
+    xhr.responseType = "json"
     xhr.addEventListener("error", onError)
 
     xhr.onload = { (event: dom.Event) =>
       event.currentTarget.removeEventListener("error", onError)
       xhr.onload = null
-      (for {
-        _ <- {
-          if (xhr.status != 200)
-            Left(new RuntimeException(s"Failed to load $src"))
-          else Right(())
-        }
-        obj <- Try(js.JSON.parse(xhr.responseText)).toEither
-      } yield {
+      if (xhr.status == 200) {
         loaded.synchronized {
           loaded += 1
         }
-        p.success((name, obj.asInstanceOf[js.Object]))
-      }).left.map(p.failure(_))
+        p.success((name, xhr.response.asInstanceOf[js.Object]))
+      } else
+        p.failure(new RuntimeException(s"Failed to load $src"))
     }
     xhr.send()
     p.future
