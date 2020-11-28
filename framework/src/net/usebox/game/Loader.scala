@@ -12,21 +12,23 @@ trait Loader {
 
   var loaded: Int = 0
 
+  def onerror(src: String, p: Promise[_]): js.Function1[dom.Event, Unit] = {
+    (event: dom.Event) =>
+      p.failure(new RuntimeException(s"Failed to load $src"))
+  }
+
   def objectLoader(
       name: String,
       src: String
   ): Future[(String, js.Object)] = {
     val p = Promise[(String, js.Object)]()
+    val onError = onerror(src, p)
     val xhr = new dom.XMLHttpRequest
     xhr.open("GET", src)
-
-    val onerror: js.Function1[dom.Event, Unit] = { (event: dom.Event) =>
-      p.failure(new RuntimeException(s"Failed to load $src"))
-    }
-    xhr.addEventListener("error", onerror)
+    xhr.addEventListener("error", onError)
 
     xhr.onload = { (event: dom.Event) =>
-      event.currentTarget.removeEventListener("error", onerror)
+      event.currentTarget.removeEventListener("error", onError)
       xhr.onload = null
       (for {
         _ <- {
@@ -51,17 +53,14 @@ trait Loader {
       src: String
   ): Future[(String, dom.html.Image)] = {
     val p = Promise[(String, dom.html.Image)]()
+    val onError = onerror(src, p)
     val image =
       dom.document.createElement("img").asInstanceOf[dom.html.Image]
     image.src = src
-
-    val onerror: js.Function1[dom.Event, Unit] = { (event: dom.Event) =>
-      p.failure(new RuntimeException(s"Failed to load $src"))
-    }
-    image.addEventListener("error", onerror)
+    image.addEventListener("error", onError)
 
     image.onload = { (event: dom.Event) =>
-      event.currentTarget.removeEventListener("error", onerror)
+      event.currentTarget.removeEventListener("error", onError)
       image.onload = null
       loaded.synchronized {
         loaded += 1
@@ -76,19 +75,16 @@ trait Loader {
       src: String
   ): Future[(String, dom.html.Audio)] = {
     val p = Promise[(String, dom.html.Audio)]()
+    val onError = onerror(src, p)
     val audio =
       dom.document.createElement("audio").asInstanceOf[dom.html.Audio]
     audio.src = src
     audio.autoplay = false
-
-    val onerror: js.Function1[dom.Event, Unit] = { (event: dom.Event) =>
-      p.failure(new RuntimeException(s"Failed to load $src"))
-    }
-    audio.addEventListener("error", onerror)
+    audio.addEventListener("error", onError)
 
     audio.oncanplaythrough = { (event: dom.Event) =>
       audio.oncanplaythrough = null
-      audio.removeEventListener("error", onerror)
+      audio.removeEventListener("error", onError)
       loaded.synchronized {
         loaded += 1
       }
