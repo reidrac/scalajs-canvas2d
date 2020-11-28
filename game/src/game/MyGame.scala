@@ -15,6 +15,8 @@ class MyGame(
   val font =
     new BitmapFont(resources("font").asInstanceOf[dom.html.Image], 6, 11)
 
+  println(resources("map").asInstanceOf[js.Dynamic].hello)
+
   def update: Unit = {
 
     if (controller.buttonA) {

@@ -1,6 +1,7 @@
 package net.usebox.game
 
 import scala.concurrent.{Future, Promise}
+import scala.util.Try
 
 import scala.scalajs.js
 import org.scalajs.dom
@@ -10,6 +11,40 @@ trait Loader {
   def renderer: CanvasRenderer
 
   var loaded: Int = 0
+
+  def objectLoader(
+      name: String,
+      src: String
+  ): Future[(String, js.Object)] = {
+    val p = Promise[(String, js.Object)]()
+    val xhr = new dom.XMLHttpRequest
+    xhr.open("GET", src)
+
+    val onerror: js.Function1[dom.Event, Unit] = { (event: dom.Event) =>
+      p.failure(new RuntimeException(s"Failed to load $src"))
+    }
+    xhr.addEventListener("error", onerror)
+
+    xhr.onload = { (event: dom.Event) =>
+      event.currentTarget.removeEventListener("error", onerror)
+      xhr.onload = null
+      (for {
+        _ <- {
+          if (xhr.status != 200)
+            Left(new RuntimeException(s"Failed to load $src"))
+          else Right(())
+        }
+        obj <- Try(js.JSON.parse(xhr.responseText)).toEither
+      } yield {
+        loaded.synchronized {
+          loaded += 1
+        }
+        p.success((name, obj.asInstanceOf[js.Object]))
+      }).left.map(p.failure(_))
+    }
+    xhr.send()
+    p.future
+  }
 
   def imageLoader(
       name: String,

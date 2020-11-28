@@ -14,7 +14,8 @@ class MyLoader(canvasElementId: String)(implicit
     load(
       List(
         imageLoader("font", "resources/font.png"),
-        audioLoader("effect", "resources/test.ogg")
+        audioLoader("effect", "resources/test.ogg"),
+        objectLoader("map", "resources/test.json")
       )
     ) {
       case Left(error) =>
