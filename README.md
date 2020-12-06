@@ -12,7 +12,7 @@
 2. Run `mill` in background:
 
 ```
-mill -j 4 -w all "{_.reformat,_.compile}"
+mill -j 4 -w all _.compile
 ```
 
 ## Quick overview

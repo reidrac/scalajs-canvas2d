@@ -7,6 +7,11 @@ trait MyScalaJSModule extends ScalaJSModule with ScalafmtModule {
   def ivyDeps = Agg(
     ivy"org.scala-js:scalajs-dom_sjs1_2.13:1.1.0"
   )
+
+  override def compile = T {
+    reformat().apply()
+    super.compile()
+  }
 }
 
 object framework extends MyScalaJSModule
