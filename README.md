@@ -12,7 +12,7 @@
 2. Run `mill` in background:
 
 ```
-mill -j 4 -w all _.compile
+mill -j 4 -w all _.compile game.fastOpt
 ```
 
 ## Quick overview
