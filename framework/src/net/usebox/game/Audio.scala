@@ -35,7 +35,7 @@ class Audio(resources: Map[String, js.Object], limit: Int = 8) {
         }
       }
       playable.loop = loop
-      playable.play
+      playable.play()
       playingCount.synchronized {
         playingCount += 1
       }

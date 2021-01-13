@@ -35,10 +35,10 @@ class CanvasRenderer(
   var scale: Int = 1
 
   def render(block: => Unit): Unit = {
-    ctx.save
+    ctx.save()
     ctx.scale(scale, scale)
     block
-    ctx.restore
+    ctx.restore()
   }
 
   def draw(drawable: Drawable): Unit =

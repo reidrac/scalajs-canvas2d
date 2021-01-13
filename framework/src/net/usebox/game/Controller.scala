@@ -37,7 +37,7 @@ class KeyboardController() extends Controller {
       case KeyCode.Up | KeyCode.Down | KeyCode.Left | KeyCode.Right |
           KeyCode.Z | KeyCode.X | KeyCode.C | KeyCode.Enter =>
         keysState += event.keyCode
-        event.preventDefault
+        event.preventDefault()
       case _ =>
     }
 

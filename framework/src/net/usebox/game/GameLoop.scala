@@ -7,13 +7,13 @@ trait GameLoop {
   val framesPerSecond: Double = 1 / 60.toDouble
 
   var dt: Double = 0
-  var then: Double = 0
+  var tThen: Double = 0
 
   def update: Unit
   def draw: Unit
 
-  def loop(now: Double): Unit = {
-    dt += Math.min(framesPerSecond, now - then)
+  def loop(tNow: Double): Unit = {
+    dt += Math.min(framesPerSecond, tNow - tThen)
     while (dt >= updatesPerSecond) {
       update
       dt -= updatesPerSecond
@@ -21,7 +21,7 @@ trait GameLoop {
 
     draw
 
-    then = now
+    tThen = tNow
     window.requestAnimationFrame(loop)
   }
 
