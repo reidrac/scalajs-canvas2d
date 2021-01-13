@@ -4,8 +4,15 @@ import mill._, scalajslib._, scalalib._, scalafmt._
 trait MyScalaJSModule extends ScalaJSModule with ScalafmtModule {
   def scalaVersion = "2.13.4"
   def scalaJSVersion = "1.4.0"
-
-  def scalacOptions = Seq("-deprecation")
+  def scalacOptions = Seq(
+    // features
+    "-encoding", "utf-8",
+    "-explaintypes",
+    // warnings
+    "-deprecation",
+    "-Xlint:unused",
+    "-unchecked",
+  )
 
   def ivyDeps = Agg(
     ivy"org.scala-js:scalajs-dom_sjs1_2.13:1.1.0"
