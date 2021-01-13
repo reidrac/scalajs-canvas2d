@@ -1,7 +1,5 @@
 package game
 
-import scala.collection.mutable
-
 import org.scalajs.dom
 
 object Main {
