@@ -12,7 +12,7 @@ trait Loader {
 
   /** Resources to load.
     *
-   *  Expected to be (name, object).
+    * Expected to be (name, object).
     */
   def sources: List[Future[(String, js.Object)]]
 
