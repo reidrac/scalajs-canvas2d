@@ -17,7 +17,7 @@ trait Loader {
   def sources: List[Future[(String, js.Object)]]
 
   /** Method to be called when the loading progress finishes. */
-  def onload(resources: Either[Throwable, Map[String, js.Object]]): Unit
+  def onload(resources: Map[String, js.Object]): Unit
 
   def objectLoader(
       name: String,
@@ -96,17 +96,21 @@ trait Loader {
     loadingProgress(sources.size)
 
     Future.sequence(sources).onComplete { result =>
-      onload(result.toEither.map { loaded =>
+      result.toEither.map { loaded =>
         loaded
           .map { case (name, element) => (name, element) }
           .toMap[String, js.Object]
-      })
+      } match {
+        case Right(resources) => onload(resources)
+        case Left(error)      => loadingFailed(error)
+      }
     }
   }
 
   private var loadCount: Int = 0
+  private var loadError: Boolean = false
 
-  private def onerror(
+  def onerror(
       src: String,
       p: Promise[_]
   ): js.Function1[dom.Event, Unit] = { (event: dom.Event) =>
@@ -115,6 +119,7 @@ trait Loader {
 
   private def loadingProgress(size: Int) = {
     def loading(now: Double): Unit = {
+      renderer.clear
       renderer.ctx.save()
       renderer.ctx.fillStyle = "rgb(255, 255, 255)"
       renderer.ctx.font = "caption"
@@ -143,10 +148,36 @@ trait Loader {
         )
       }
 
-      if (loadCount != size)
+      if (loadCount != size && !loadError)
         dom.window.requestAnimationFrame(loading)
     }
 
     loading(0)
+  }
+
+  private def loadingFailed(error: Throwable) = {
+    def failed(now: Double): Unit = {
+      renderer.clear
+      renderer.ctx.save()
+      renderer.ctx.fillStyle = "rgb(255, 255, 255)"
+      renderer.ctx.font = "caption"
+      renderer.ctx.fillText(
+        "ERROR Loading Resources",
+        Math.floor(renderer.width * 0.2 * renderer.scale),
+        Math.floor((renderer.height / 2 - 6) * renderer.scale)
+      )
+      renderer.ctx.fillStyle = "rgb(255, 55, 55)"
+      renderer.ctx.fillText(
+        error.getMessage.toString(),
+        Math.floor(renderer.width * 0.2 * renderer.scale),
+        Math.floor((renderer.height / 2 + 10) * renderer.scale)
+      )
+      renderer.ctx.restore()
+      dom.window.requestAnimationFrame(failed)
+    }
+
+    loadError = true
+    println(s"Error loading resources: $error")
+    failed(0)
   }
 }

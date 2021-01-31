@@ -41,6 +41,17 @@ class CanvasRenderer(
     ctx.restore()
   }
 
+  def clear: Unit = {
+    ctx.save()
+    ctx.clearRect(
+      0,
+      0,
+      ctx.canvas.width,
+      ctx.canvas.height
+    )
+    ctx.restore()
+  }
+
   def draw(drawable: Drawable): Unit =
     ctx.drawImage(
       drawable.image,

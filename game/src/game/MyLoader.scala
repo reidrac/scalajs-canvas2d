@@ -15,19 +15,11 @@ class MyLoader(canvasElementId: String) extends Loader {
     objectLoader("map", "resources/test.json")
   )
 
-  def onload(resources: Either[Throwable, Map[String, js.Object]]): Unit =
-    resources match {
-      case Left(error) =>
-        val p = dom.document.createElement("p")
-        p.textContent = s"ERROR loading resources: $error"
-        dom.document.body.appendChild(p)
-
-      case Right(resources) =>
-        new MyGame(
-          renderer,
-          new KeyboardController(),
-          new Audio(resources),
-          resources
-        ).run
-    }
+  def onload(resources: Map[String, js.Object]): Unit =
+    new MyGame(
+      renderer,
+      new KeyboardController(),
+      new Audio(resources),
+      resources
+    ).run
 }
