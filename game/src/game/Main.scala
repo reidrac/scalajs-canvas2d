@@ -9,6 +9,6 @@ object Main {
   def main(args: Array[String]): Unit =
     dom.document.addEventListener(
       "DOMContentLoaded",
-      { (e: dom.Event) => new MyLoader("game").run }
+      { (e: dom.Event) => new MyLoader("game").load }
     )
 }

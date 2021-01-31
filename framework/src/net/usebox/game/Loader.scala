@@ -6,15 +6,18 @@ import scala.scalajs.js
 import org.scalajs.dom
 
 trait Loader {
-  def run: Unit
+
+  /** Renderer to show the loading progress. */
   def renderer: CanvasRenderer
 
-  var loaded: Int = 0
+  /** Resources to load.
+    *
+   *  Expected to be (name, object).
+    */
+  def sources: List[Future[(String, js.Object)]]
 
-  def onerror(src: String, p: Promise[_]): js.Function1[dom.Event, Unit] = {
-    (event: dom.Event) =>
-      p.failure(new RuntimeException(s"Failed to load $src"))
-  }
+  /** Method to be called when the loading progress finishes. */
+  def onload(resources: Either[Throwable, Map[String, js.Object]]): Unit
 
   def objectLoader(
       name: String,
@@ -31,8 +34,8 @@ trait Loader {
       event.currentTarget.removeEventListener("error", onError)
       xhr.onload = null
       if (xhr.status == 200) {
-        loaded.synchronized {
-          loaded += 1
+        loadCount.synchronized {
+          loadCount += 1
         }
         p.success((name, xhr.response.asInstanceOf[js.Object]))
       } else
@@ -56,8 +59,8 @@ trait Loader {
     image.onload = { (event: dom.Event) =>
       event.currentTarget.removeEventListener("error", onError)
       image.onload = null
-      loaded.synchronized {
-        loaded += 1
+      loadCount.synchronized {
+        loadCount += 1
       }
       p.success((name, image))
     }
@@ -79,28 +82,35 @@ trait Loader {
     audio.oncanplaythrough = { (event: dom.Event) =>
       audio.oncanplaythrough = null
       audio.removeEventListener("error", onError)
-      loaded.synchronized {
-        loaded += 1
+      loadCount.synchronized {
+        loadCount += 1
       }
       p.success((name, audio))
     }
     p.future
   }
 
-  def load(
-      sources: List[Future[(String, js.Object)]]
-  )(block: (Either[Throwable, Map[String, js.Object]]) => Unit)(implicit
+  def load(implicit
       executionContext: scala.concurrent.ExecutionContextExecutor
   ): Unit = {
     loadingProgress(sources.size)
 
     Future.sequence(sources).onComplete { result =>
-      block(result.toEither.map { loaded =>
+      onload(result.toEither.map { loaded =>
         loaded
           .map { case (name, element) => (name, element) }
           .toMap[String, js.Object]
       })
     }
+  }
+
+  private var loadCount: Int = 0
+
+  private def onerror(
+      src: String,
+      p: Promise[_]
+  ): js.Function1[dom.Event, Unit] = { (event: dom.Event) =>
+    p.failure(new RuntimeException(s"Failed to load $src"))
   }
 
   private def loadingProgress(size: Int) = {
@@ -127,13 +137,13 @@ trait Loader {
         renderer.ctx.fillRect(
           Math.floor(renderer.width * 0.2),
           Math.floor(renderer.height / 2) - 4,
-          (loaded * (renderer.width - Math
+          (loadCount * (renderer.width - Math
             .floor(renderer.width * 0.4))) / size,
           4
         )
       }
 
-      if (loaded != size)
+      if (loadCount != size)
         dom.window.requestAnimationFrame(loading)
     }
 
