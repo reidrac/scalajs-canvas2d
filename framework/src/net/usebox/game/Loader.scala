@@ -110,7 +110,7 @@ trait Loader {
   private var loadCount: Int = 0
   private var loadError: Boolean = false
 
-  def onerror(
+  private def onerror(
       src: String,
       p: Promise[_]
   ): js.Function1[dom.Event, Unit] = { (event: dom.Event) =>
