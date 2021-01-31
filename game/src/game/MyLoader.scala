@@ -1,7 +1,6 @@
 package game
 
 import scala.scalajs.js
-import org.scalajs.dom
 
 import net.usebox.game._
 
