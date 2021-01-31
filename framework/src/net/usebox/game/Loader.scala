@@ -48,8 +48,8 @@ trait Loader {
   def imageLoader(
       name: String,
       src: String
-  ): Future[(String, dom.html.Image)] = {
-    val p = Promise[(String, dom.html.Image)]()
+  ): Future[(String, js.Object)] = {
+    val p = Promise[(String, js.Object)]()
     val onError = onerror(src, p)
     val image =
       dom.document.createElement("img").asInstanceOf[dom.html.Image]
@@ -70,8 +70,8 @@ trait Loader {
   def audioLoader(
       name: String,
       src: String
-  ): Future[(String, dom.html.Audio)] = {
-    val p = Promise[(String, dom.html.Audio)]()
+  ): Future[(String, js.Object)] = {
+    val p = Promise[(String, js.Object)]()
     val onError = onerror(src, p)
     val audio =
       dom.document.createElement("audio").asInstanceOf[dom.html.Audio]
@@ -96,12 +96,8 @@ trait Loader {
     loadingProgress(sources.size)
 
     Future.sequence(sources).onComplete { result =>
-      result.toEither.map { loaded =>
-        loaded
-          .map { case (name, element) => (name, element) }
-          .toMap[String, js.Object]
-      } match {
-        case Right(resources) => onload(resources)
+      result.toEither match {
+        case Right(resources) => onload(resources.toMap)
         case Left(error)      => loadingFailed(error)
       }
     }
