@@ -33,7 +33,7 @@ object game extends MyScalaJSModule {
 object server extends ScalaModule with ScalafmtModule {
   def scalaVersion = "2.13.4"
   def ivyDeps = Agg(
-    ivy"com.lihaoyi::scalatags:0.9.1",
-    ivy"com.lihaoyi::cask:0.6.7"
+    ivy"com.lihaoyi::scalatags:0.9.3",
+    ivy"com.lihaoyi::cask:0.7.8"
   )
 }

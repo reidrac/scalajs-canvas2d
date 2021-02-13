@@ -6,9 +6,9 @@ import io.undertow.server.handlers.accesslog.{
   AccessLogReceiver
 }
 import scalatags.Text.all._
-import cask.util.Logger.Console
+import cask.util.Logger
 
-class ConsoleAccessLogReceiver(logger: Console) extends AccessLogReceiver {
+class ConsoleAccessLogReceiver(logger: Logger) extends AccessLogReceiver {
   override def logMessage(message: String): Unit = logger.debug(message)
 }
 
