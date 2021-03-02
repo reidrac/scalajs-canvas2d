@@ -3,16 +3,16 @@
 ## Requirements
 
  - JDK 8 (or later; openjdk 8 or 11 recommended)
- - [Mill](http://www.lihaoyi.com/mill/) (0.7.4 or later) for building
+ - Mill (use the bootstrap script)
 
 ## Quickstart
 
-1. Run `mill server.run` for a dev HTTP server and open `http://127.0.0.1:8080`
+1. Run `./mill server.run` for a dev HTTP server and open `http://127.0.0.1:8080`
 
 2. Run `mill` in background:
 
 ```
-mill -j 4 -w game.fastOpt
+./mill -j 4 -w game.fastOpt
 ```
 
 ## Quick overview
