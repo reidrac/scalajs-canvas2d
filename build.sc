@@ -1,4 +1,5 @@
 // build.sc
+import $ivy.`com.lihaoyi::mill-contrib-bloop:0.9.5`
 import mill._, scalajslib._, scalalib._, scalafmt._
 
 trait MyScalaJSModule extends ScalaJSModule with ScalafmtModule {
