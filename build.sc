@@ -6,24 +6,22 @@ trait MyScalaJSModule extends ScalaJSModule with ScalafmtModule {
   def scalaVersion = "2.13.6"
   def scalaJSVersion = "1.7.0"
 
-  def scalacOptions = Seq(
-    // features
-    "-encoding", "utf-8",
-    "-explaintypes",
-    // warnings
-    "-deprecation",
-    "-Xlint:unused",
-    "-unchecked",
-  )
+  def scalacOptions =
+    Seq(
+      // features
+      "-encoding",
+      "utf-8",
+      "-explaintypes",
+      // warnings
+      "-deprecation",
+      "-Xlint:unused",
+      "-unchecked"
+    )
 
-  def ivyDeps = Agg(
-    ivy"org.scala-js:scalajs-dom_sjs1_2.13:1.1.0"
-  )
-
-  override def compile = T {
-    reformat().apply()
-    super.compile()
-  }
+  def ivyDeps =
+    Agg(
+      ivy"org.scala-js:scalajs-dom_sjs1_2.13:1.1.0"
+    )
 }
 
 object framework extends MyScalaJSModule
@@ -34,8 +32,9 @@ object game extends MyScalaJSModule {
 
 object server extends ScalaModule with ScalafmtModule {
   def scalaVersion = "2.13.6"
-  def ivyDeps = Agg(
-    ivy"com.lihaoyi::scalatags:0.9.3",
-    ivy"com.lihaoyi::cask:0.7.8"
-  )
+  def ivyDeps =
+    Agg(
+      ivy"com.lihaoyi::scalatags:0.9.3",
+      ivy"com.lihaoyi::cask:0.7.8"
+    )
 }
